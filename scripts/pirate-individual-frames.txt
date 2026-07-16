@@ -1,0 +1,63 @@
+// pirate_red
+{ id: 0, x: 0, y: 0, width: 477, height: 341 }, // down
+{ id: 1, x: 477, y: 0, width: 478, height: 341 }, // down
+{ id: 2, x: 0, y: 341, width: 318, height: 341 }, // side
+{ id: 3, x: 318, y: 341, width: 318, height: 341 }, // side
+{ id: 4, x: 636, y: 341, width: 319, height: 341 }, // side
+{ id: 5, x: 0, y: 682, width: 477, height: 342 }, // up
+{ id: 6, x: 477, y: 682, width: 478, height: 342 }, // up
+
+// pirate_captain
+{ id: 0, x: 0, y: 0, width: 477, height: 341 }, // down
+{ id: 1, x: 477, y: 0, width: 478, height: 341 }, // down
+{ id: 2, x: 0, y: 341, width: 318, height: 341 }, // side
+{ id: 3, x: 318, y: 341, width: 318, height: 341 }, // side
+{ id: 4, x: 636, y: 341, width: 319, height: 341 }, // side
+{ id: 5, x: 0, y: 682, width: 477, height: 342 }, // up
+{ id: 6, x: 477, y: 682, width: 478, height: 342 }, // up
+
+// pirate_green
+{ id: 0, x: 0, y: 0, width: 478, height: 341 }, // down
+{ id: 1, x: 478, y: 0, width: 479, height: 341 }, // down
+{ id: 2, x: 0, y: 341, width: 319, height: 341 }, // side
+{ id: 3, x: 319, y: 341, width: 319, height: 341 }, // side
+{ id: 4, x: 638, y: 341, width: 319, height: 341 }, // side
+{ id: 5, x: 0, y: 682, width: 478, height: 342 }, // up
+{ id: 6, x: 478, y: 682, width: 479, height: 342 }, // up
+
+// pirate_brown
+{ id: 0, x: 0, y: 0, width: 477, height: 341 }, // down
+{ id: 1, x: 477, y: 0, width: 478, height: 341 }, // down
+{ id: 2, x: 0, y: 341, width: 318, height: 341 }, // side
+{ id: 3, x: 318, y: 341, width: 318, height: 341 }, // side
+{ id: 4, x: 636, y: 341, width: 319, height: 341 }, // side
+{ id: 5, x: 0, y: 682, width: 477, height: 342 }, // up
+{ id: 6, x: 477, y: 682, width: 478, height: 342 }, // up
+
+// pirate_bald
+{ id: 0, x: 0, y: 0, width: 450, height: 341 }, // down
+{ id: 1, x: 450, y: 0, width: 450, height: 341 }, // down
+{ id: 2, x: 0, y: 341, width: 300, height: 341 }, // side
+{ id: 3, x: 300, y: 341, width: 300, height: 341 }, // side
+{ id: 4, x: 600, y: 341, width: 300, height: 341 }, // side
+{ id: 5, x: 0, y: 682, width: 450, height: 342 }, // up
+{ id: 6, x: 450, y: 682, width: 450, height: 342 }, // up
+
+// pirate_blue
+{ id: 0, x: 0, y: 0, width: 450, height: 341 }, // down
+{ id: 1, x: 450, y: 0, width: 450, height: 341 }, // down
+{ id: 2, x: 0, y: 341, width: 300, height: 341 }, // side
+{ id: 3, x: 300, y: 341, width: 300, height: 341 }, // side
+{ id: 4, x: 600, y: 341, width: 300, height: 341 }, // side
+{ id: 5, x: 0, y: 682, width: 450, height: 342 }, // up
+{ id: 6, x: 450, y: 682, width: 450, height: 342 }, // up
+
+// pirate_tattoo
+{ id: 0, x: 0, y: 0, width: 450, height: 341 }, // down
+{ id: 1, x: 450, y: 0, width: 450, height: 341 }, // down
+{ id: 2, x: 0, y: 341, width: 300, height: 341 }, // side
+{ id: 3, x: 300, y: 341, width: 300, height: 341 }, // side
+{ id: 4, x: 600, y: 341, width: 300, height: 341 }, // side
+{ id: 5, x: 0, y: 682, width: 450, height: 342 }, // up
+{ id: 6, x: 450, y: 682, width: 450, height: 342 }, // up
+

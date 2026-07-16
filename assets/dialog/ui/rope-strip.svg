@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 12" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="rope" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9a7848"/>
+      <stop offset="35%" stop-color="#6a5030"/>
+      <stop offset="65%" stop-color="#8a6840"/>
+      <stop offset="100%" stop-color="#5a4228"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="12" fill="url(#rope)"/>
+  <path d="M0 3h400M0 6h400M0 9h400" stroke="#4a3820" stroke-width="0.6" opacity="0.5"/>
+  <path d="M20 0v12M60 0v12M100 0v12M140 0v12M180 0v12M220 0v12M260 0v12M300 0v12M340 0v12M380 0v12" stroke="#3a2818" stroke-width="0.4" opacity="0.35"/>
+</svg>

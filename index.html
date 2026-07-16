@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Tripulação em Apuros</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Pirata+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+  <div id="page-shell">
+    <header id="page-title" aria-label="Tripulação em Apuros">
+      <span class="title-ornament title-ornament-left"></span>
+      <span class="title-skull" aria-hidden="true">☠</span>
+      <span class="title-ornament title-ornament-right"></span>
+      <div class="title-stack">
+        <span class="title-top">TRIPULAÇÃO</span>
+        <span class="title-mid">EM</span>
+        <span class="title-bottom">APUROS</span>
+      </div>
+      <span class="title-divider" aria-hidden="true"></span>
+    </header>
+
+  <div id="game-wrapper">
+
+    <div id="game-container"></div>
+
+    <div id="ui-overlay">
+
+    <div id="game-hud" class="hidden">
+
+      <header id="hud-area-banner">
+
+        <span class="hud-banner-wing hud-banner-wing-left"></span>
+
+        <span id="hud-area-name">PORÃO DO NAVIO</span>
+
+        <span class="hud-banner-wing hud-banner-wing-right"></span>
+
+      </header>
+
+
+
+      <div id="hud-top-right">
+        <button id="pause-btn" type="button" title="Pausar (Esc)">❚❚</button>
+      </div>
+
+
+
+      <aside id="hud-objective">
+
+        <span class="hud-label">OBJETIVO</span>
+
+        <p id="hud-objective-text"></p>
+
+      </aside>
+
+
+
+      <div id="inventory-panel">
+
+        <div id="inventory-slots"></div>
+
+        <div id="inventory-tooltip" class="hidden">
+
+          <p id="inventory-tooltip-name"></p>
+
+          <p id="inventory-tooltip-desc"></p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div id="dialog-box" class="hidden dialog-theme-narrator">
+
+      <div class="dialog-inner">
+
+        <div class="dialog-portrait-wrap dialog-portrait-left" id="dialog-portrait-left">
+
+          <div class="dialog-portrait-frame">
+
+            <img id="dialog-portrait-left-img" alt="">
+
+          </div>
+
+        </div>
+
+
+
+        <div class="dialog-panel">
+
+          <div class="dialog-panel-deco" aria-hidden="true"></div>
+
+          <div class="dialog-panel-body">
+
+            <div class="dialog-speaker-wrap">
+
+              <p id="dialog-speaker">NARRADOR</p>
+
+              <span class="dialog-speaker-ornament" aria-hidden="true"></span>
+
+            </div>
+
+            <p id="dialog-text"></p>
+
+            <span class="dialog-hint">Pressione <span class="dialog-key">E</span> ou clique para continuar</span>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="dialog-portrait-wrap dialog-portrait-right" id="dialog-portrait-right">
+
+          <div class="dialog-portrait-frame">
+
+            <img id="dialog-portrait-right-img" alt="">
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="objective-banner" class="hidden">
+
+      <p id="objective-text"></p>
+
+    </div>
+
+    <div id="blood-splash" class="hidden"></div>
+
+    <div id="deck-controls-hint" class="hidden" aria-live="polite">
+      <span class="hud-label">DICA</span>
+      <p><strong>SHIFT</strong>: ESCONDER-SE ATRÁS DE OBJETOS</p>
+      <p><strong>ESQ. MOUSE</strong>: ATACAR (<span class="key-highlight">E</span>) (APENAS POR TRÁS)</p>
+    </div>
+
+    <div id="game-over-overlay" class="hidden">
+      <div class="game-over-vignette" aria-hidden="true"></div>
+      <div class="game-over-panel">
+        <span class="game-over-skull" aria-hidden="true">☠</span>
+        <h1 class="game-over-title">GAME OVER</h1>
+        <p id="game-over-reason" class="game-over-reason"></p>
+        <span class="game-over-divider" aria-hidden="true"></span>
+        <p class="game-over-subtitle">Os piratas não deram chance.</p>
+
+        <nav class="game-over-buttons">
+          <button id="game-over-retry" type="button" class="game-over-btn">
+            <span class="game-over-btn-icon" aria-hidden="true">☠</span>
+            <span>TENTAR NOVAMENTE</span>
+          </button>
+          <button id="game-over-menu" type="button" class="game-over-btn">
+            <span class="game-over-btn-icon" aria-hidden="true">⚓</span>
+            <span>VOLTAR AO MENU</span>
+          </button>
+        </nav>
+
+        <aside class="game-over-tip">
+          <span class="game-over-tip-skull" aria-hidden="true">☠</span>
+          <div class="game-over-tip-text">
+            <strong>DICA</strong>
+            <p>Abaixe-se (Shift) e se aproxime por trás para atacar (<span class="key-highlight">E</span>) sem ser notado.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div id="victory-overlay" class="hidden">
+      <div class="victory-vignette" aria-hidden="true"></div>
+      <div class="victory-panel">
+        <span class="victory-skull" aria-hidden="true">☠</span>
+        <div class="victory-title-wrap">
+          <span class="victory-title-wing victory-title-wing-left" aria-hidden="true"></span>
+          <h1 class="victory-title">VITÓRIA!</h1>
+          <span class="victory-title-wing victory-title-wing-right" aria-hidden="true"></span>
+        </div>
+        <p class="victory-message">Você alcançou o bote salva-vidas com as chaves em mãos.</p>
+        <p class="victory-subtitle">A tripulação em apuros encontrou uma saída. Mas a noite no mar está longe de acabar...</p>
+        <span class="victory-anchor" aria-hidden="true">⚓</span>
+
+        <nav class="victory-buttons">
+          <button id="victory-play-again" type="button" class="victory-btn">
+            <span class="victory-btn-icon" aria-hidden="true">⚓</span>
+            <span>JOGAR NOVAMENTE</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <div id="pause-overlay" class="hidden">
+
+      <div class="pause-box">
+
+        <h2>PAUSADO</h2>
+
+        <button id="pause-resume" type="button">CONTINUAR</button>
+
+        <button id="pause-options" type="button">OPÇÕES</button>
+
+        <button id="pause-menu" type="button">SAIR PARA O MENU</button>
+
+        <button id="pause-quit" type="button">SAIR DO JOGO</button>
+
+      </div>
+
+    </div>
+
+
+
+    <div id="main-menu" class="hidden">
+      <nav class="menu-buttons">
+        <button class="menu-btn menu-btn-play" data-action="play">
+          <span class="menu-btn-glint" aria-hidden="true">✦</span>
+          <span>JOGAR</span>
+        </button>
+        <button class="menu-btn menu-btn-disabled" disabled>CONTINUAR</button>
+        <button class="menu-btn" data-action="options">OPÇÕES</button>
+        <button class="menu-btn" data-action="credits">CRÉDITOS</button>
+        <button class="menu-btn" data-action="quit">SAIR</button>
+      </nav>
+
+      <span class="menu-version">v1.0.0</span>
+    </div>
+
+    <div id="menu-modal" class="hidden">
+
+      <div class="menu-modal-box">
+
+        <h2 id="menu-modal-title"></h2>
+
+        <div id="menu-modal-body"></div>
+
+        <button id="menu-modal-close">Fechar</button>
+
+      </div>
+
+    </div>
+
+    </div>
+
+  </div>
+  </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+
+  <script src="js/audio.js"></script>
+
+  <script src="js/dialog.js"></script>
+
+  <script src="js/hud.js"></script>
+
+  <script src="js/menu.js"></script>
+
+  <script src="js/pause.js"></script>
+
+  <script src="js/gameOver.js"></script>
+
+  <script src="js/victory.js"></script>
+
+  <script src="js/inventory.js"></script>
+
+  <script src="js/sailorFrames.js"></script>
+
+  <script src="js/playerFrames.js"></script>
+
+  <script src="js/playerTopFrames.js"></script>
+
+  <script src="js/pirateTopFrames.js"></script>
+
+  <script src="js/crateFrames.js"></script>
+
+  <script src="js/barrelFrames.js"></script>
+
+  <script src="js/cargoPileFrames.js"></script>
+
+  <script src="js/deckLayout.js"></script>
+
+  <script src="js/holdFrames.js"></script>
+
+  <script src="js/scenes/MenuScene.js"></script>
+
+  <script src="js/scenes/BootScene.js"></script>
+
+  <script src="js/scenes/HoldScene.js"></script>
+
+  <script src="js/scenes/DeckScene.js"></script>
+
+  <script src="js/scenes/GameOverScene.js"></script>
+
+  <script src="js/scenes/VictoryScene.js"></script>
+
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,57 @@
+// red
+{ id: 0, x: 61, y: 21, width: 98, height: 273 }, // red down
+{ id: 1, x: 159, y: 23, width: 98, height: 271 }, // red down
+// SKIP red side 61-125 -> 7x73
+{ id: 2, x: 126, y: 340, width: 65, height: 171 }, // red side
+{ id: 3, x: 191, y: 342, width: 66, height: 168 }, // red side
+{ id: 4, x: 128, y: 522, width: 31, height: 82 }, // red up
+{ id: 5, x: 159, y: 522, width: 98, height: 83 }, // red up
+// captain
+{ id: 6, x: 301, y: 17, width: 96, height: 282 }, // captain down
+{ id: 7, x: 397, y: 29, width: 97, height: 270 }, // captain down
+{ id: 8, x: 301, y: 389, width: 64, height: 121 }, // captain side
+{ id: 9, x: 365, y: 342, width: 64, height: 169 }, // captain side
+{ id: 10, x: 429, y: 351, width: 65, height: 159 }, // captain side
+// SKIP captain up 301-396 -> 21x75
+{ id: 11, x: 397, y: 521, width: 97, height: 84 }, // captain up
+// green
+{ id: 12, x: 529, y: 21, width: 93, height: 273 }, // green down
+{ id: 13, x: 622, y: 29, width: 93, height: 265 }, // green down
+{ id: 14, x: 529, y: 355, width: 29, height: 156 }, // green side
+{ id: 15, x: 614, y: 340, width: 38, height: 170 }, // green side
+{ id: 16, x: 652, y: 340, width: 63, height: 168 }, // green side
+// SKIP green up 529-621 -> 18x68
+{ id: 17, x: 622, y: 521, width: 70, height: 83 }, // green up
+// brown
+{ id: 18, x: 758, y: 21, width: 89, height: 278 }, // brown down
+{ id: 19, x: 847, y: 21, width: 89, height: 277 }, // brown down
+{ id: 20, x: 758, y: 343, width: 45, height: 165 }, // brown side
+// SKIP brown side 817-875 -> x
+// SKIP brown side 876-935 -> x
+{ id: 21, x: 758, y: 521, width: 31, height: 83 }, // brown up
+// SKIP brown up 847-935 -> x
+// bald
+{ id: 22, x: 119, y: 23, width: 95, height: 271 }, // bald down
+{ id: 23, x: 214, y: 23, width: 96, height: 270 }, // bald down
+{ id: 24, x: 119, y: 340, width: 63, height: 171 }, // bald side
+{ id: 25, x: 182, y: 360, width: 64, height: 150 }, // bald side
+{ id: 26, x: 246, y: 340, width: 64, height: 171 }, // bald side
+{ id: 27, x: 128, y: 522, width: 70, height: 83 }, // bald up
+{ id: 28, x: 230, y: 522, width: 71, height: 83 }, // bald up
+// blue
+{ id: 29, x: 364, y: 25, width: 97, height: 274 }, // blue down
+{ id: 30, x: 461, y: 23, width: 97, height: 270 }, // blue down
+{ id: 31, x: 364, y: 342, width: 64, height: 169 }, // blue side
+{ id: 32, x: 428, y: 353, width: 65, height: 157 }, // blue side
+{ id: 33, x: 493, y: 343, width: 65, height: 168 }, // blue side
+{ id: 34, x: 376, y: 521, width: 71, height: 84 }, // blue up
+{ id: 35, x: 476, y: 521, width: 71, height: 84 }, // blue up
+// tattoo
+{ id: 36, x: 614, y: 29, width: 161, height: 265 }, // tattoo down
+{ id: 37, x: 775, y: 21, width: 161, height: 278 }, // tattoo down
+{ id: 38, x: 614, y: 340, width: 107, height: 170 }, // tattoo side
+{ id: 39, x: 721, y: 342, width: 82, height: 166 }, // tattoo side
+// SKIP tattoo side 828-935 -> x
+{ id: 40, x: 622, y: 521, width: 153, height: 83 }, // tattoo up
+// SKIP tattoo up 775-935 -> 14x49
+// total=41
