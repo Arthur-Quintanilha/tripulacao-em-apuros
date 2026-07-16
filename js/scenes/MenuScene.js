@@ -3,10 +3,6 @@ class MenuScene extends Phaser.Scene {
     super('MenuScene');
   }
 
-  preload() {
-    this.load.image('menu_bg', 'assets/menu/menu_bg.png?v=2');
-  }
-
   create() {
     this.add.image(480, 270, 'menu_bg').setDisplaySize(960, 540);
 

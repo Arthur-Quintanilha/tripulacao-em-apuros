@@ -9,6 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Tripulação em Apuros</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Pirata+One&display=swap" rel="stylesheet">
@@ -17,6 +19,25 @@
 </head>
 
 <body>
+  <div id="loading-screen" aria-live="polite" aria-busy="true" aria-label="Carregando o jogo">
+    <div class="loading-vignette" aria-hidden="true"></div>
+    <div class="loading-content">
+      <span class="loading-skull" aria-hidden="true">☠</span>
+      <div class="loading-title-stack">
+        <span class="loading-title-top">TRIPULAÇÃO</span>
+        <span class="loading-title-mid">EM</span>
+        <span class="loading-title-bottom">APUROS</span>
+      </div>
+      <span class="loading-divider" aria-hidden="true"></span>
+      <p class="loading-status" id="loading-status">Preparando o navio...</p>
+      <div class="loading-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="loading-bar-fill" id="loading-bar-fill"></div>
+      </div>
+      <span class="loading-percent" id="loading-percent">0%</span>
+      <span class="loading-anchor" aria-hidden="true">⚓</span>
+    </div>
+  </div>
+
   <div id="page-shell">
     <header id="page-title" aria-label="Tripulação em Apuros">
       <span class="title-ornament title-ornament-left"></span>
@@ -262,6 +283,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
 
+  <script src="js/loading.js"></script>
+
   <script src="js/audio.js"></script>
 
   <script src="js/dialog.js"></script>
@@ -295,6 +318,8 @@
   <script src="js/deckLayout.js"></script>
 
   <script src="js/holdFrames.js"></script>
+
+  <script src="js/scenes/LoadingScene.js"></script>
 
   <script src="js/scenes/MenuScene.js"></script>
 
