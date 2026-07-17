@@ -1123,7 +1123,7 @@ class DeckScene extends Phaser.Scene {
       const dist = Phaser.Math.Distance.Between(
         this.player.x, this.player.y, pirate.x, pirate.y
       );
-      if (dist > 72 || !this.isBehindPirate(pirate)) continue;
+      if (dist > 72 || this.canDetectPlayer(pirate)) continue;
       if (dist < bestDist) {
         target = pirate;
         bestDist = dist;
@@ -1140,7 +1140,7 @@ class DeckScene extends Phaser.Scene {
       const dist = Phaser.Math.Distance.Between(
         this.player.x, this.player.y, pirate.x, pirate.y
       );
-      if (dist <= 72 && !this.isBehindPirate(pirate)) {
+      if (dist <= 72 && this.canDetectPlayer(pirate)) {
         return pirate;
       }
     }
@@ -1159,7 +1159,7 @@ class DeckScene extends Phaser.Scene {
       const dist = Phaser.Math.Distance.Between(
         this.player.x, this.player.y, pirate.x, pirate.y
       );
-      if (dist <= 95) {
+      if (dist <= 95 && !this.canDetectPlayer(pirate)) {
         nearPirate = true;
         break;
       }
@@ -1434,7 +1434,7 @@ class DeckScene extends Phaser.Scene {
         this.pirate1Label.setDepth(Math.floor(this.pirate1.y) + 1);
       }
 
-      if (dist < 65 && this.isBehindPirate(this.pirate1) && InventorySystem.isEquipped('knife')) {
+      if (dist < 65 && !this.canDetectPlayer(this.pirate1) && InventorySystem.isEquipped('knife')) {
         this.showAttackHint();
         this.hideStealthWarning();
       } else if (this.canDetectPlayer(this.pirate1)) {
