@@ -42,6 +42,17 @@
     </div>
   </div>
 
+  <div id="age-rating-screen" class="hidden" role="dialog" aria-live="polite" aria-label="Classificação indicativa">
+    <div class="age-rating-vignette" aria-hidden="true"></div>
+    <div class="age-rating-content">
+      <div class="age-rating-badge age-rating-badge-teen" aria-label="T — 13 anos ou mais">
+        <span class="age-rating-letter">T</span>
+        <span class="age-rating-plus">13+</span>
+      </div>
+      <p class="age-rating-disclaimer">Este jogo contém cenas de violência e medo. Não indicado para menores de 13 anos.</p>
+    </div>
+  </div>
+
   <div id="page-shell">
     <header id="page-title" aria-label="Tripulação em Apuros">
       <span class="title-ornament title-ornament-left"></span>
@@ -262,6 +273,11 @@
       </nav>
 
       <span class="menu-version">v1.0.0</span>
+
+      <div class="menu-age-badge" aria-label="T — 13 anos ou mais">
+        <span class="menu-age-letter">T</span>
+        <span class="menu-age-plus">13+</span>
+      </div>
     </div>
 
     <div id="menu-modal" class="hidden">
@@ -317,6 +333,8 @@
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
 
   <script src="js/loading.js"></script>
+
+  <script src="js/ageRating.js"></script>
 
   <script src="js/responsive.js"></script>
 

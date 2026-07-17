@@ -31,7 +31,9 @@ class LoadingScene extends Phaser.Scene {
 
   create() {
     LoadingSystem.complete(() => {
-      this.scene.start('MenuScene');
+      AgeRatingSystem.show(() => {
+        this.scene.start('MenuScene');
+      });
     });
   }
 }

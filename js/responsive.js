@@ -150,7 +150,8 @@ const GameScale = {
     if (!hint) return;
 
     const show = this.isMobile() && !this.isLandscape()
-      && !document.body.classList.contains('loading-active');
+      && !document.body.classList.contains('loading-active')
+      && !document.body.classList.contains('age-rating-active');
     hint.classList.toggle('hidden', !show);
     document.body.classList.toggle('orientation-lock', show);
   }
