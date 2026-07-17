@@ -970,26 +970,79 @@ class DeckScene extends Phaser.Scene {
   }
 
   isNearCover() {
-    return this.covers.some((cover) =>
-      Phaser.Math.Distance.Between(this.player.x, this.player.y, cover.x, cover.y) <= cover.hideRadius
-    );
+    return !!this.getPlayerCover();
   }
 
-  isHidingBehindCover(pirate) {
-    if (!this.isStealth || !this.isNearCover()) return false;
+  getPlayerCover() {
+    if (!this.isStealth) return null;
+
+    let nearest = null;
+    let nearestDist = Infinity;
+
+    for (const cover of this.covers) {
+      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, cover.x, cover.y);
+      if (dist <= cover.hideRadius && dist < nearestDist) {
+        nearest = cover;
+        nearestDist = dist;
+      }
+    }
+
+    return nearest;
+  }
+
+  isLineBlockedByWalls(x1, y1, x2, y2, endMargin = 12) {
+    const totalDist = Phaser.Math.Distance.Between(x1, y1, x2, y2);
+    if (totalDist < endMargin) return false;
+
+    const steps = Math.max(4, Math.ceil(totalDist / 10));
+    for (let i = 1; i < steps; i++) {
+      const t = i / steps;
+      const sampleDist = t * totalDist;
+      if (totalDist - sampleDist < endMargin) break;
+
+      const px = x1 + (x2 - x1) * t;
+      const py = y1 + (y2 - y1) * t;
+
+      for (const wall of this.walls.getChildren()) {
+        if (!wall.active) continue;
+        if (wall.getBounds().contains(px, py)) return true;
+      }
+    }
+
+    return false;
+  }
+
+  hasLineOfSightToPlayer(pirate) {
+    return !this.isLineBlockedByWalls(pirate.x, pirate.y, this.player.x, this.player.y);
+  }
+
+  isPlayerHiddenByCover(pirate) {
+    const cover = this.getPlayerCover();
+    if (!cover) return false;
+
+    const px = this.player.x - cover.x;
+    const py = this.player.y - cover.y;
+    const kx = pirate.x - cover.x;
+    const ky = pirate.y - cover.y;
+    const lenP = Math.hypot(px, py) || 1;
+    const lenK = Math.hypot(kx, ky) || 1;
+    const dot = (px * kx + py * ky) / (lenP * lenK);
+
+    // Pirata do mesmo lado que o jogador (por trás / nas costas)
+    if (dot > 0.25) return false;
+
+    // Flanco lateral — enxerga pela lateral da caixa
+    if (Math.abs(dot) < 0.45) return false;
 
     const sightLine = new Phaser.Geom.Line(
       pirate.x, pirate.y, this.player.x, this.player.y
     );
 
-    return this.covers.some((cover) => {
-      const nearThisCover = Phaser.Math.Distance.Between(
-        this.player.x, this.player.y, cover.x, cover.y
-      ) <= cover.hideRadius;
+    return Phaser.Geom.Intersects.LineToRectangle(sightLine, cover.rect);
+  }
 
-      if (!nearThisCover) return false;
-      return Phaser.Geom.Intersects.LineToRectangle(sightLine, cover.rect);
-    });
+  isHidingBehindCover(pirate) {
+    return this.isPlayerHiddenByCover(pirate);
   }
 
   isBehindPirate(pirate) {
@@ -1022,7 +1075,8 @@ class DeckScene extends Phaser.Scene {
   canDetectPlayer(pirate) {
     if (pirate.isDead || !pirate.active) return false;
     if (!this.isInVisionCone(pirate)) return false;
-    if (this.isHidingBehindCover(pirate)) return false;
+    if (!this.hasLineOfSightToPlayer(pirate)) return false;
+    if (this.isPlayerHiddenByCover(pirate)) return false;
     return true;
   }
 
