@@ -65,9 +65,19 @@ class GameOverScene extends Phaser.Scene {
 
   retryFromDeck() {
     GameOverSystem.hide();
+    DialogSystem.hide();
+    PauseSystem.unbindScene(this);
+    GameHUD.hide();
+    TouchControls.hide();
     InventorySystem.reset();
     InventorySystem.addItem('knife');
-    DialogSystem.hide();
+
+    if (this.scene.isActive('DeckScene')) {
+      this.scene.stop('DeckScene');
+    }
+
+    this.cameras.main.resetFX();
+    this.cameras.main.setAlpha(1);
     this.scene.start('DeckScene');
   }
 

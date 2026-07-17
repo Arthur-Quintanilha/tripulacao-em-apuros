@@ -43,10 +43,7 @@ const DECK_LAYOUT = {
     { x: 500, y: 780, frame: 1 },
     { x: 380, y: 700, frame: 2 },
     { x: 500, y: 380, frame: 3 },
-    { x: 360, y: 155, frame: 9 },
-    { x: 720, y: 700, frame: 6 },
-    { x: 710, y: 860, frame: 7 },
-    { x: 730, y: 920, frame: 8 }
+    { x: 360, y: 155, frame: 9 }
   ],
 
   coverSpots: [
@@ -55,14 +52,27 @@ const DECK_LAYOUT = {
     { x: 430, y: 580, frame: 2 },
     { x: 400, y: 380, frame: 3 },
     { x: 450, y: 900, frame: 9 },
-    { x: 500, y: 720, frame: 10 }
+    { x: 500, y: 720, frame: 10 },
+    { x: 552, y: 560, frame: 2 }
+  ],
+
+  storageDecorations: [
+    { room: 'storage1', type: 'cover', nx: 0.32, ny: 0.42, frame: 4 },
+    { room: 'storage1', type: 'barrel', nx: 0.58, ny: 0.30, frame: 4 },
+    { room: 'storage1', type: 'pile', nx: 0.74, ny: 0.54, frame: 0 },
+    { room: 'storage1', type: 'barrel', nx: 0.40, ny: 0.74, frame: 5 },
+    { room: 'storage2', type: 'cover', nx: 0.34, ny: 0.40, frame: 5 },
+    { room: 'storage2', type: 'barrel', nx: 0.60, ny: 0.28, frame: 6 },
+    { room: 'storage2', type: 'pile', nx: 0.76, ny: 0.52, frame: 1 },
+    { room: 'storage2', type: 'barrel', nx: 0.42, ny: 0.72, frame: 7 }
   ],
 
   captainPatrol: [
-    { x: 615, y: 473 },
-    { x: 745, y: 473 },
-    { x: 745, y: 603 },
-    { x: 615, y: 603 }
+    { x: 615, y: 468 },
+    { x: 745, y: 468 },
+    { x: 745, y: 545 },
+    { x: 680, y: 598 },
+    { x: 615, y: 598 }
   ],
 
   deckPatrols: null
@@ -119,19 +129,35 @@ function buildDeckPatrols() {
       wp: patrolZoneRect(268, 358, 'edge', 'edge')
     },
     {
-      zone: 'centro-esq',
-      speed: 56,
+      zone: 'acesso-capitao',
+      speed: 48,
       wpStart: 0,
-      waitMs: 300,
-      wp: patrolZoneRect(472, 608, 'edge', 390)
+      waitMs: 750,
+      wp: [
+        { x: 522, y: 458 },
+        { x: 522, y: 520 },
+        { x: 522, y: 585 },
+        { x: 522, y: 648 },
+        { x: 512, y: 648 },
+        { x: 512, y: 585 },
+        { x: 512, y: 520 },
+        { x: 512, y: 458 }
+      ]
+    },
+    {
+      zone: 'centro-esq',
+      speed: 54,
+      wpStart: 0,
+      waitMs: 450,
+      wp: patrolZoneRect(455, 620, 'edge', 395)
     },
     {
       zone: 'centro-dir',
-      speed: 60,
-      wpStart: 2,
-      waitMs: 700,
+      speed: 56,
+      wpStart: 1,
+      waitMs: 550,
       reverse: true,
-      wp: patrolZoneRect(492, 638, 425, 'edge')
+      wp: patrolZoneRect(445, 665, 435, 'edge')
     },
     {
       zone: 'popa-esq',
@@ -142,9 +168,9 @@ function buildDeckPatrols() {
     },
     {
       zone: 'popa-dir',
-      speed: 54,
+      speed: 52,
       wpStart: 3,
-      waitMs: 1200,
+      waitMs: 1100,
       reverse: true,
       wp: patrolZoneRect(812, 968, 420, 'edge')
     }
@@ -175,6 +201,21 @@ function clampSpriteToHull(sprite, options = {}) {
 
 function deckRect(zone) {
   return new Phaser.Geom.Rectangle(zone.x, zone.y, zone.w, zone.h);
+}
+
+function storageSpot(roomKey, nx, ny) {
+  const room = DECK_LAYOUT[roomKey];
+  if (!room) return { x: 0, y: 0 };
+
+  const padX = 28;
+  const padY = 22;
+  const innerW = Math.max(40, room.w - padX * 2);
+  const innerH = Math.max(40, room.h - padY * 2);
+
+  return {
+    x: Math.round(room.x + padX + innerW * Phaser.Math.Clamp(nx, 0, 1)),
+    y: Math.round(room.y + padY + innerH * Phaser.Math.Clamp(ny, 0, 1))
+  };
 }
 
 DECK_LAYOUT.deckPatrols = buildDeckPatrols();

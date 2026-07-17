@@ -18,9 +18,9 @@ const PIRATE_TOP_FRAMES = [
 ];
 
 function registerPirateTopFrames(texture) {
-  PIRATE_TOP_FRAMES.forEach((f) => {
-    if (!texture.has(f.id)) {
-      texture.add(f.id, 0, f.x, f.y, f.width, f.height);
-    }
-  });
+  ensureSheetFrames(texture, PIRATE_TOP_FRAMES);
+}
+
+function ensurePirateTopFrames(texture) {
+  return ensureSheetFrames(texture, PIRATE_TOP_FRAMES);
 }

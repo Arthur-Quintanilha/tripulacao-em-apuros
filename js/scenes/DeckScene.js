@@ -48,35 +48,9 @@ class DeckScene extends Phaser.Scene {
   create() {
     this.cameras.main.resetFX();
     this.cameras.main.setAlpha(1);
+    this.cameras.main.setBackgroundColor('#0b1e38');
 
-    if (this.textures.exists('protagonist_top')) {
-      const tex = this.textures.get('protagonist_top');
-      registerPlayerTopFrames(tex);
-      tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
-    }
-    if (this.textures.exists('pirate_top')) {
-      const tex = this.textures.get('pirate_top');
-      registerPirateTopFrames(tex);
-      tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
-    }
-    if (this.textures.exists('deck_crates')) {
-      const tex = this.textures.get('deck_crates');
-      registerCrateFrames(tex);
-      tex.setFilter(Phaser.Textures.FilterMode.LINEAR);
-    }
-    if (this.textures.exists('deck_barrels')) {
-      const tex = this.textures.get('deck_barrels');
-      registerBarrelFrames(tex);
-      tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
-    }
-    if (this.textures.exists('deck_mast')) {
-      this.textures.get('deck_mast').setFilter(Phaser.Textures.FilterMode.LINEAR);
-    }
-    if (this.textures.exists('deck_cargo_piles')) {
-      const tex = this.textures.get('deck_cargo_piles');
-      registerCargoPileFrames(tex);
-      tex.setFilter(Phaser.Textures.FilterMode.LINEAR);
-    }
+    this.prepareDeckTextures();
     this.createPirateTopAnims();
 
     this.physics.world.gravity.y = 0;
@@ -113,16 +87,46 @@ class DeckScene extends Phaser.Scene {
     TouchControls.show();
 
     this.events.once('shutdown', () => {
-      this.events.off('postupdate', this.clampActorsToHull, this);
-      GameAudio.stopCreepyWhistle();
-      if (this._attackClickHandler && this.gameWrapper) {
-        this.gameWrapper.removeEventListener('mousedown', this._attackClickHandler, true);
-      }
-      GameHUD.hideDeckControlsHint();
-      PauseSystem.unbindScene(this);
-      GameHUD.unbindScene(this);
-      TouchControls.hide();
+      this.cleanupDeckScene();
     });
+  }
+
+  prepareDeckTextures() {
+    const sheets = [
+      ['protagonist_top', ensurePlayerTopFrames, Phaser.Textures.FilterMode.NEAREST],
+      ['pirate_top', ensurePirateTopFrames, Phaser.Textures.FilterMode.NEAREST],
+      ['deck_crates', registerCrateFrames, Phaser.Textures.FilterMode.LINEAR],
+      ['deck_barrels', registerBarrelFrames, Phaser.Textures.FilterMode.NEAREST],
+      ['deck_cargo_piles', registerCargoPileFrames, Phaser.Textures.FilterMode.LINEAR]
+    ];
+
+    sheets.forEach(([key, registerFn, filter]) => {
+      if (!this.textures.exists(key)) return;
+      const tex = this.textures.get(key);
+      registerFn(tex);
+      tex.setFilter(filter);
+    });
+
+    if (this.textures.exists('deck_mast')) {
+      this.textures.get('deck_mast').setFilter(Phaser.Textures.FilterMode.LINEAR);
+    }
+  }
+
+  cleanupDeckScene() {
+    this._goToGameOverTimer?.remove(false);
+    this._goToGameOverTimer = null;
+    this.tweens.killAll();
+    this.time.removeAllEvents();
+    this.events.off('postupdate', this.clampActorsToHull, this);
+    GameAudio.stopCreepyWhistle();
+    if (this._attackClickHandler && this.gameWrapper) {
+      this.gameWrapper.removeEventListener('mousedown', this._attackClickHandler, true);
+      this._attackClickHandler = null;
+    }
+    GameHUD.hideDeckControlsHint();
+    PauseSystem.unbindScene(this);
+    GameHUD.unbindScene(this);
+    TouchControls.hide();
   }
 
   createTextures() {
@@ -376,6 +380,7 @@ class DeckScene extends Phaser.Scene {
     this.createCoverObjects();
     this.createCargoPileDecorations();
     this.createBarrelDecorations();
+    this.createStorageDecorations();
   }
 
   createOcean(L) {
@@ -485,11 +490,15 @@ class DeckScene extends Phaser.Scene {
   }
 
   clampActorsToHull() {
-    if (this.player && this.player.active) clampSpriteToHull(this.player);
+    if (this.player && this.player.active) {
+      clampSpriteToHull(this.player);
+      this.physics.world.collide(this.player, this.walls);
+    }
     if (this.pirates) {
       this.pirates.forEach((pirate) => {
         if (pirate.active && !pirate.isDead) {
           clampSpriteToHull(pirate, { margin: PATROL_HULL_MARGIN });
+          this.physics.world.collide(pirate, this.walls);
         }
       });
     }
@@ -549,14 +558,23 @@ class DeckScene extends Phaser.Scene {
     DECK_LAYOUT.coverSpots.forEach(({ x, y, frame }) => this.addCover(x, y, frame));
   }
 
+  createStorageDecorations() {
+    (DECK_LAYOUT.storageDecorations || []).forEach((item) => {
+      const pos = storageSpot(item.room, item.nx, item.ny);
+      if (item.type === 'cover') this.addCover(pos.x, pos.y, item.frame);
+      else if (item.type === 'barrel') this.addBarrel(pos.x, pos.y, item.frame);
+      else if (item.type === 'pile') this.addCargoPile(pos.x, pos.y, item.frame);
+    });
+  }
+
   addCover(x, y, frameId = 0) {
     const frame = getCrateFrame(frameId);
     const targetW = 52;
     const scale = targetW / frame.width;
     const displayW = Math.round(frame.width * scale);
     const displayH = Math.round(frame.height * scale);
-    const bodyW = Math.round(displayW * 0.9);
-    const bodyH = Math.round(displayH * 0.72);
+    const bodyW = Math.round(displayW * 0.95);
+    const bodyH = Math.round(displayH * 0.78);
     const bodyY = y + Math.round(displayH * 0.04);
 
     const cover = {
@@ -586,10 +604,20 @@ class DeckScene extends Phaser.Scene {
   }
 
   moveWithWallSlide(sprite, stepX, stepY) {
-    sprite.body.reset(sprite.x + stepX, sprite.y);
-    this.physics.world.collide(sprite, this.walls);
-    sprite.body.reset(sprite.x, sprite.y + stepY);
-    this.physics.world.collide(sprite, this.walls);
+    if (!sprite.body) {
+      sprite.x += stepX;
+      sprite.y += stepY;
+      return;
+    }
+
+    if (stepX !== 0) {
+      sprite.x += stepX;
+      this.physics.world.collide(sprite, this.walls);
+    }
+    if (stepY !== 0) {
+      sprite.y += stepY;
+      this.physics.world.collide(sprite, this.walls);
+    }
   }
 
   setFeetDepth(sprite, offset = 0) {
@@ -621,11 +649,15 @@ class DeckScene extends Phaser.Scene {
 
   createPlayer() {
     this.playerFacing = 'up';
+    this.createPlayerTopAnims();
+
+    const playerTex = this.textures.get('protagonist_top');
+    const startFrame = playerTex?.has(8) ? 8 : 0;
     this.player = this.physics.add.sprite(
       DECK_LAYOUT.playerStart.x,
       DECK_LAYOUT.playerStart.y,
       'protagonist_top',
-      8
+      startFrame
     );
     this.player.setScale(this.PLAYER_TOP_SCALE);
     this.player.setOrigin(0.5, 0.85);
@@ -635,7 +667,6 @@ class DeckScene extends Phaser.Scene {
     this.player.body.setOffset(30, 88);
     this.physics.add.collider(this.player, this.walls);
     this.setFeetDepth(this.player);
-    this.createPlayerTopAnims();
 
     this.stealthIndicator = this.add.circle(this.player.x, this.player.y, 14, 0x00ff00, 0.15).setDepth(16);
     this.stealthIndicator.setVisible(false);
@@ -701,6 +732,8 @@ class DeckScene extends Phaser.Scene {
   }
 
   setupPirateBody(pirate) {
+    if (!pirate?.frame?.sourceSize) return;
+
     const fw = pirate.frame.width;
     const fh = pirate.frame.height;
     const bw = Math.round(fw * 0.28);
@@ -1196,14 +1229,9 @@ class DeckScene extends Phaser.Scene {
         this.keysGlow.setVisible(false);
         this.keysLabel.setVisible(false);
         InventorySystem.addItem('keys');
-        GameHUD.setObjective('Suba à proa e alcance o bote salva-vidas. Use SHIFT atrás de caixas para se esconder!');
+        GameHUD.setObjective('Alcance o bote salva-vidas na proa.');
         GameHUD.setArea('CONVÉS ABERTO');
         this.openDeckDoor();
-
-        DialogSystem.show([
-          { speaker: 'Narrador', text: 'Você pegou as chaves dos botes de emergência!' },
-          { speaker: 'Narrador', text: 'A proa está liberada! Piratas patrulham o convés aberto — esconda-se atrás de caixas com SHIFT!' }
-        ], () => { this.playerControl = true; });
       }
     });
   }
@@ -1229,8 +1257,6 @@ class DeckScene extends Phaser.Scene {
     const arrivalDist = pirate.patrolArrival ?? 12;
 
     if (dist < arrivalDist) {
-      pirate.setPosition(target.x, target.y);
-      clampSpriteToHull(pirate, { margin: PATROL_HULL_MARGIN });
       pirate.setVelocity(0, 0);
       this.updatePirateTopAnim(pirate, false);
 
@@ -1262,10 +1288,6 @@ class DeckScene extends Phaser.Scene {
       pirate._lastPatrolDist = dist;
 
       if ((pirate._stuckTimer || 0) > 850) {
-        if (dist < 64) {
-          pirate.setPosition(target.x, target.y);
-          clampSpriteToHull(pirate, { margin: PATROL_HULL_MARGIN });
-        }
         pirate.wpIndex = (pirate.wpIndex + 1) % pirate.waypoints.length;
         pirate._stuckTimer = 0;
         pirate._lastPatrolDist = null;
@@ -1314,7 +1336,10 @@ class DeckScene extends Phaser.Scene {
     this.cameras.main.shake(300, 0.02);
     this.cameras.main.flash(300, 200, 0, 0);
 
-    this.time.delayedCall(400, () => {
+    this._goToGameOverTimer?.remove(false);
+    this._goToGameOverTimer = this.time.delayedCall(400, () => {
+      this._goToGameOverTimer = null;
+      if (!this.sys.isActive()) return;
       this.cameras.main.resetFX();
       this.scene.start('GameOverScene', { reason });
     });
@@ -1451,7 +1476,7 @@ class DeckScene extends Phaser.Scene {
     const onDeck = this.isInZone(this.openDeckZone) || this.isInZone(this.bowZone);
     if (onDeck && !this.wasOnDeck && InventorySystem.has('keys')) {
       GameHUD.setArea('CONVÉS / PROA');
-      GameHUD.setObjective('Alcance o bote salva-vidas na proa. Esconda-se atrás de caixas com SHIFT!');
+      GameHUD.setObjective('Alcance o bote salva-vidas na proa.');
     }
     this.wasOnDeck = onDeck;
 

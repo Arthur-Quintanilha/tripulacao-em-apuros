@@ -1256,11 +1256,14 @@ body.game-paused #game-hud {
 
 .menu-modal-box {
   width: 380px;
-  background: rgba(10, 15, 30, 0.96);
-  border: 2px solid #c9a84c;
+  background: linear-gradient(180deg, rgba(14, 10, 8, 0.98) 0%, rgba(10, 15, 30, 0.96) 100%);
+  border: 2px solid #7a5a14;
   border-radius: 8px;
   padding: 20px 24px;
   color: #e8e0d0;
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.45) inset,
+    0 8px 28px rgba(0, 0, 0, 0.65);
 }
 
 #menu-modal-title {
@@ -1279,9 +1282,82 @@ body.game-paused #game-hud {
   margin-bottom: 8px;
 }
 
-.menu-credits-muted {
-  color: #888;
+.menu-credits {
+  text-align: center;
+  padding: 4px 6px 2px;
+}
+
+.menu-credits-game {
+  margin: 0 0 14px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #e8d090;
+  text-shadow: 0 0 18px rgba(201, 168, 76, 0.25);
+}
+
+.menu-credits-divider {
+  height: 1px;
+  margin: 0 auto 16px;
+  background: linear-gradient(90deg, transparent, #7a5c20 12%, #c9a84c 50%, #7a5c20 88%, transparent);
+  opacity: 0.9;
+}
+
+.menu-credits-divider-short {
+  width: 55%;
+  margin-top: 4px;
+  margin-bottom: 14px;
+}
+
+.menu-credits-by {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 14px;
+}
+
+.menu-credits-by-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #c9a84c;
+}
+
+.menu-credits-author {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #f0e6cc;
+  line-height: 1.35;
+}
+
+.menu-credits-course {
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #d8ccb0;
+  max-width: 28ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.menu-credits-institution {
+  margin: 0 0 4px;
   font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #c9a84c;
+}
+
+.menu-credits-muted {
+  margin: 0;
+  color: rgba(180, 170, 150, 0.72);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .menu-option {
@@ -1776,6 +1852,15 @@ body.victory-active #page-title {
   display: none;
 }
 
+.touch-left-cluster {
+  position: absolute;
+  left: max(3%, env(safe-area-inset-left, 0px));
+  bottom: max(4%, env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+
 .touch-right-cluster {
   position: absolute;
   right: max(3%, env(safe-area-inset-right, 0px));
@@ -1841,8 +1926,8 @@ body.victory-active #page-title {
 
 .touch-joystick {
   position: relative;
-  width: clamp(92px, 17vmin, 118px);
-  height: clamp(92px, 17vmin, 118px);
+  width: clamp(100px, 20vmin, 128px);
+  height: clamp(100px, 20vmin, 128px);
   touch-action: none;
 }
 
@@ -2040,6 +2125,11 @@ body.touch-controls-active.game-active #dialog-box {
 }
 
 @media (pointer: coarse) and (orientation: landscape) {
+  .touch-left-cluster {
+    left: max(3%, env(safe-area-inset-left, 0px));
+    bottom: max(4%, env(safe-area-inset-bottom, 0px));
+  }
+
   .touch-right-cluster {
     right: max(3%, env(safe-area-inset-right, 0px));
     bottom: max(4%, env(safe-area-inset-bottom, 0px));

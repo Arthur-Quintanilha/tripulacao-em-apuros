@@ -32,10 +32,24 @@ const TouchControls = {
     this.bindPulseButton('touch-attack', '_attackQueued');
     this.setupJoystick();
 
-    window.addEventListener('resize', () => this.updateVisibility());
-    window.addEventListener('orientationchange', () => {
-      setTimeout(() => this.updateVisibility(), 150);
+    window.addEventListener('resize', () => {
+      this.updateJoystickMaxRadius();
+      this.updateVisibility();
     });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        this.updateJoystickMaxRadius();
+        this.updateVisibility();
+      }, 150);
+    });
+  },
+
+  updateJoystickMaxRadius() {
+    const base = this.joystickZone?.querySelector('.touch-joystick-base');
+    if (!base) return;
+    const size = base.getBoundingClientRect().width;
+    if (size < 2) return;
+    this._joystickMaxRadius = Math.max(30, size * 0.36);
   },
 
   setupJoystick() {
@@ -44,6 +58,7 @@ const TouchControls = {
 
     const onStart = (clientX, clientY, pointerId) => {
       if (this._joystickActive) return;
+      this.updateJoystickMaxRadius();
       this._joystickActive = true;
       this._joystickPointerId = pointerId;
       this.joystickZone.classList.add('is-active');
@@ -238,6 +253,7 @@ const TouchControls = {
     const visible = this.shouldShow();
     this.root.classList.toggle('hidden', !visible);
     document.body.classList.toggle('touch-controls-active', visible);
+    if (visible) this.updateJoystickMaxRadius();
     if (!visible) this.resetState();
   },
 

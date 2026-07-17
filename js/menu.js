@@ -119,10 +119,18 @@ const MenuSystem = {
   showCredits() {
     this.modalTitle.textContent = 'Créditos';
     this.modalBody.innerHTML = `
-      <p><strong>Tripulação em Apuros</strong></p>
-      <p>Projeto acadêmico — UFOP</p>
-      <p>Desenvolvido com Phaser 3</p>
-      <p class="menu-credits-muted">Arte, design e programação pela equipe do projeto.</p>
+      <div class="menu-credits">
+        <p class="menu-credits-game">Tripulação em Apuros</p>
+        <div class="menu-credits-divider" aria-hidden="true"></div>
+        <p class="menu-credits-by">
+          <span class="menu-credits-by-label">Por</span>
+          <span class="menu-credits-author">Arthur Quintanilha Duarte</span>
+        </p>
+        <p class="menu-credits-course">Disciplina de Design e Desenvolvimento de Jogos</p>
+        <p class="menu-credits-institution">UFOP</p>
+        <div class="menu-credits-divider menu-credits-divider-short" aria-hidden="true"></div>
+        <p class="menu-credits-muted">Desenvolvido com Phaser 3</p>
+      </div>
     `;
     this.modal.classList.remove('hidden');
   },

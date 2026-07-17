@@ -14,11 +14,7 @@ const CRATE_FRAMES = [
 ];
 
 function registerCrateFrames(texture) {
-  CRATE_FRAMES.forEach((f) => {
-    if (!texture.has(f.id)) {
-      texture.add(f.id, 0, f.x, f.y, f.width, f.height);
-    }
-  });
+  ensureSheetFrames(texture, CRATE_FRAMES);
 }
 
 function getCrateFrame(frameId = 0) {
