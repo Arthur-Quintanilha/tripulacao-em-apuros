@@ -12,6 +12,7 @@ class MenuScene extends Phaser.Scene {
     MenuSystem.init();
     MenuSystem.onPlay = () => this.startGame();
     MenuSystem.show();
+    TouchControls.hide();
 
     this.setupMenuAudio();
   }

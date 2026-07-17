@@ -6,7 +6,11 @@
 
   <meta charset="UTF-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a0a12">
 
   <title>Tripulação em Apuros</title>
   <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -137,7 +141,7 @@
 
             <p id="dialog-text"></p>
 
-            <span class="dialog-hint">Pressione <span class="dialog-key">E</span> ou clique para continuar</span>
+            <span class="dialog-hint"><span class="dialog-hint-desktop">Pressione <span class="dialog-key">E</span> ou clique para continuar</span><span class="dialog-hint-mobile">Toque para continuar</span></span>
 
           </div>
 
@@ -276,7 +280,34 @@
 
     </div>
 
+    <div id="touch-controls" class="hidden" aria-label="Controles touch">
+      <div class="touch-right-cluster">
+        <div class="touch-action-stack">
+          <button type="button" id="touch-jump" class="touch-icon-btn touch-action-jump" aria-label="Pular">
+            <img src="assets/touch/jump.png" alt="" class="touch-icon-img touch-icon-jump" width="40" height="40">
+          </button>
+          <button type="button" id="touch-attack" class="touch-icon-btn touch-action-attack hidden" aria-label="Atacar">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 19l4-4 1.4 1.4L3.4 20.4 2 19zm16.7-12.3l1.6-1.6a1 1 0 0 0 0-1.4l-1.4-1.4a1 1 0 0 0-1.4 0l-1.6 1.6 2.8 2.8zM5.6 13.5L3 16.1l1.4 1.4 2.6-2.6-1.4-1.4zm11.1-8.1l2.8 2.8 2.1-2.1a1 1 0 0 0 0-1.4l-1.4-1.4a1 1 0 0 0-1.4 0l-2.1 2.1z" fill="currentColor"/></svg>
+          </button>
+          <button type="button" id="touch-crouch" class="touch-icon-btn touch-action-crouch" aria-label="Agachar">
+            <img src="assets/touch/crouch.png" alt="" class="touch-icon-img touch-icon-crouch" width="40" height="40">
+          </button>
+        </div>
+        <div id="touch-joystick" class="touch-joystick" aria-label="Mover">
+          <div class="touch-joystick-base"></div>
+          <div id="touch-joystick-stick" class="touch-joystick-stick"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
+  </div>
+
+  <div id="orientation-hint" class="hidden" aria-live="polite">
+    <div class="orientation-hint-box">
+      <span class="orientation-hint-icon" aria-hidden="true">📱</span>
+      <p>Gire o dispositivo para a <strong>paisagem</strong> para jogar.</p>
+    </div>
   </div>
 
 
@@ -284,6 +315,10 @@
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
 
   <script src="js/loading.js"></script>
+
+  <script src="js/responsive.js"></script>
+
+  <script src="js/touchControls.js"></script>
 
   <script src="js/audio.js"></script>
 

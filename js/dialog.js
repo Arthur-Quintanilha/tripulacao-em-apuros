@@ -66,6 +66,7 @@ const DialogSystem = {
     this.onComplete = onComplete;
     this.active = true;
     this.box.classList.remove('hidden');
+    document.body.classList.add('dialog-active');
     this.renderLine();
   },
 
@@ -173,6 +174,7 @@ const DialogSystem = {
   hide() {
     this.active = false;
     this.box.classList.add('hidden');
+    document.body.classList.remove('dialog-active');
     this.leftPortrait.classList.remove('visible');
     this.rightPortrait.classList.remove('visible');
     this.resetPortraitImg(this.leftImg);

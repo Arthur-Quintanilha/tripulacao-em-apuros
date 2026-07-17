@@ -37,12 +37,15 @@ class HoldScene extends Phaser.Scene {
     this.events.once('shutdown', () => {
       PauseSystem.unbindScene(this);
       GameHUD.unbindScene(this);
+      TouchControls.hide();
     });
 
     PauseSystem.bindScene(this);
     GameHUD.bindScene(this, {
       area: 'PORÃO DO NAVIO'
     });
+    TouchControls.setMode('hold');
+    TouchControls.show();
   }
 
   createTextures() {
@@ -360,11 +363,11 @@ class HoldScene extends Phaser.Scene {
     const speed = 160;
     let moving = false;
 
-    if (this.cursors.left.isDown || this.keys.A.isDown) {
+    if (this.cursors.left.isDown || this.keys.A.isDown || TouchControls.isDown('left')) {
       this.player.setVelocityX(-speed);
       this.facing = 'left';
       moving = true;
-    } else if (this.cursors.right.isDown || this.keys.D.isDown) {
+    } else if (this.cursors.right.isDown || this.keys.D.isDown || TouchControls.isDown('right')) {
       this.player.setVelocityX(speed);
       this.facing = 'right';
       moving = true;
@@ -394,7 +397,8 @@ class HoldScene extends Phaser.Scene {
 
     const jumpPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up)
       || Phaser.Input.Keyboard.JustDown(this.keys.W)
-      || Phaser.Input.Keyboard.JustDown(this.keys.SPACE);
+      || Phaser.Input.Keyboard.JustDown(this.keys.SPACE)
+      || TouchControls.consumeJump();
 
     if (jumpPressed && this.coyoteTimer > 0) {
       this.player.setVelocityY(this.JUMP_VELOCITY);

@@ -109,6 +109,8 @@ class DeckScene extends Phaser.Scene {
     });
     GameHUD.showDeckControlsHint(5000);
     PauseSystem.bindScene(this);
+    TouchControls.setMode('deck');
+    TouchControls.show();
 
     this.events.once('shutdown', () => {
       this.events.off('postupdate', this.clampActorsToHull, this);
@@ -119,6 +121,7 @@ class DeckScene extends Phaser.Scene {
       GameHUD.hideDeckControlsHint();
       PauseSystem.unbindScene(this);
       GameHUD.unbindScene(this);
+      TouchControls.hide();
     });
   }
 
@@ -946,7 +949,7 @@ class DeckScene extends Phaser.Scene {
       if (e.button !== 0) return;
       if (DialogSystem.active || PauseSystem.isPaused()) return;
       if (e.target.closest(
-        '#inventory-panel, #pause-btn, #pause-overlay, #dialog-box, #main-menu, #menu-modal, button, a'
+        '#inventory-panel, #pause-btn, #pause-overlay, #dialog-box, #main-menu, #menu-modal, #touch-controls, button, a'
       )) return;
       if (!this.playerControl || this.gameOver) return;
       this.tryAttack();
@@ -1055,6 +1058,26 @@ class DeckScene extends Phaser.Scene {
       }
     }
     return null;
+  }
+
+  updateTouchAttackButton() {
+    if (!InventorySystem.has('knife')) {
+      TouchControls.setAttackAvailable(false);
+      return;
+    }
+
+    let nearPirate = false;
+    for (const pirate of this.pirates) {
+      if (pirate.isDead || !pirate.active) continue;
+      const dist = Phaser.Math.Distance.Between(
+        this.player.x, this.player.y, pirate.x, pirate.y
+      );
+      if (dist <= 95) {
+        nearPirate = true;
+        break;
+      }
+    }
+    TouchControls.setAttackAvailable(nearPirate);
   }
 
   tryAttack() {
@@ -1258,7 +1281,7 @@ class DeckScene extends Phaser.Scene {
 
     this.updateCreepyWhistle(delta);
 
-    this.isStealth = this.keys.SHIFT.isDown;
+    this.isStealth = this.keys.SHIFT.isDown || TouchControls.isDown('stealth');
     this.isHidden = this.isStealth && this.isNearCover();
     this.stealthIndicator.setVisible(this.isHidden);
     this.stealthIndicator.setPosition(this.player.x, this.player.y);
@@ -1271,16 +1294,17 @@ class DeckScene extends Phaser.Scene {
     }
 
     if (this.playerControl) {
-      if (Phaser.Input.Keyboard.JustDown(this.keys.E)) this.tryAttack();
+      if (Phaser.Input.Keyboard.JustDown(this.keys.E) || TouchControls.consumeAttack()) this.tryAttack();
+      this.updateTouchAttackButton();
 
-      const speed = this.isStealth ? 75 : 170;
+      const speed = TouchControls.getDeckSpeed(this.isStealth);
       let moving = false;
       let vx = 0, vy = 0;
 
-      if (this.cursors.left.isDown || this.keys.A.isDown) { vx = -speed; moving = true; }
-      if (this.cursors.right.isDown || this.keys.D.isDown) { vx = speed; moving = true; }
-      if (this.cursors.up.isDown || this.keys.W.isDown) { vy = -speed; moving = true; }
-      if (this.cursors.down.isDown || this.keys.S.isDown) { vy = speed; moving = true; }
+      if (this.cursors.left.isDown || this.keys.A.isDown || TouchControls.isDown('left')) { vx = -speed; moving = true; }
+      if (this.cursors.right.isDown || this.keys.D.isDown || TouchControls.isDown('right')) { vx = speed; moving = true; }
+      if (this.cursors.up.isDown || this.keys.W.isDown || TouchControls.isDown('up')) { vy = -speed; moving = true; }
+      if (this.cursors.down.isDown || this.keys.S.isDown || TouchControls.isDown('down')) { vy = speed; moving = true; }
 
       if (vx !== 0 && vy !== 0) { vx *= 0.707; vy *= 0.707; }
 

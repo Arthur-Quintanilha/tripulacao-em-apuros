@@ -61,6 +61,7 @@ const PauseSystem = {
     if (!this.gameScene || this.paused) return;
 
     this.paused = true;
+    TouchControls.resetState();
     this.gameScene.scene.pause(this.sceneKey);
     this.overlay.classList.remove('hidden');
     document.body.classList.add('game-paused');
