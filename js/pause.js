@@ -81,19 +81,11 @@ const PauseSystem = {
   quitToMenu() {
     if (!this.gameScene) return;
 
-    const key = this.sceneKey;
+    const scene = this.gameScene;
     this.paused = false;
     this.overlay.classList.add('hidden');
     document.body.classList.remove('game-paused');
-
-    GameAudio.stopAmbient();
-    InventorySystem.reset();
-    DialogSystem.hide();
-    GameHUD.hide();
-
-    this.gameScene.scene.start('MenuScene');
-    this.gameScene.scene.stop(key);
-
+    SceneReset.returnToMenu(scene);
     this.gameScene = null;
     this.sceneKey = null;
   },

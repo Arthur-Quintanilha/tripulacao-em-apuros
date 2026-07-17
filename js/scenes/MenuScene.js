@@ -4,6 +4,7 @@ class MenuScene extends Phaser.Scene {
   }
 
   create() {
+    SceneReset.resetCamera(this);
     this.add.image(480, 270, 'menu_bg').setDisplaySize(960, 540);
 
     this.createRain();
@@ -76,10 +77,6 @@ class MenuScene extends Phaser.Scene {
   }
 
   startGame() {
-    GameAudio.stopMenuAmbient();
-    this.cameras.main.fadeOut(500, 0, 0, 0);
-    this.cameras.main.once('camerafadeoutcomplete', () => {
-      this.scene.start('BootScene');
-    });
+    SceneReset.startNewGame(this);
   }
 }

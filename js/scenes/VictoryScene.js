@@ -10,6 +10,7 @@ class VictoryScene extends Phaser.Scene {
   }
 
   create() {
+    SceneReset.resetCamera(this);
     GameAudio.stopAmbient();
     GameAudio.stopCreepyWhistle();
 
@@ -80,14 +81,6 @@ class VictoryScene extends Phaser.Scene {
   }
 
   playAgain() {
-    VictorySystem.hide();
-    this.cameras.main.fadeOut(450, 0, 0, 0);
-    this.cameras.main.once('camerafadeoutcomplete', () => {
-      InventorySystem.reset();
-      DialogSystem.hide();
-      GameHUD.hide();
-      GameAudio.stopAmbient();
-      this.scene.start('MenuScene');
-    });
+    SceneReset.returnToMenu(this);
   }
 }

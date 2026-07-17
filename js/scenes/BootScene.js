@@ -21,12 +21,14 @@ class BootScene extends Phaser.Scene {
   }
 
   create() {
+    SceneReset.resetCamera(this);
     InventorySystem.reset();
 
     ['hold_box', 'hold_stairs'].forEach((key) => {
       if (this.textures.exists(key)) {
         const tex = this.textures.get(key);
-        if (!tex.has('trimmed')) {
+        const frame = tex.has('trimmed') ? tex.get('trimmed') : null;
+        if (!frame || !frame.sourceSize) {
           registerHoldFrame(key, tex);
         }
         tex.setFilter(
@@ -39,17 +41,17 @@ class BootScene extends Phaser.Scene {
 
     if (this.textures.exists('protagonist')) {
       const tex = this.textures.get('protagonist');
-      registerPlayerFrames(tex);
+      ensurePlayerFrames(tex);
       tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
     }
     if (this.textures.exists('protagonist_top')) {
       const tex = this.textures.get('protagonist_top');
-      registerPlayerTopFrames(tex);
+      ensurePlayerTopFrames(tex);
       tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
     }
     if (this.textures.exists('pirate_top')) {
       const tex = this.textures.get('pirate_top');
-      registerPirateTopFrames(tex);
+      ensurePirateTopFrames(tex);
       tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
     }
     if (this.textures.exists('lifeboat')) {

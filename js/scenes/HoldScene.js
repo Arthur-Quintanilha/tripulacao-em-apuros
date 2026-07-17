@@ -4,6 +4,7 @@ class HoldScene extends Phaser.Scene {
   }
 
   create() {
+    SceneReset.resetCamera(this);
     this.physics.world.gravity.y = 720;
     this.cameras.main.setBackgroundColor('#1a0f05');
 
@@ -26,6 +27,7 @@ class HoldScene extends Phaser.Scene {
     this.coyoteTimer = 0;
     this.JUMP_VELOCITY = -378;
 
+    this.prepareHoldTextures();
     this.createTextures();
     this.createAnimations();
     this.createWorld();
@@ -48,6 +50,35 @@ class HoldScene extends Phaser.Scene {
     TouchControls.show();
   }
 
+  prepareHoldTextures() {
+    ['hold_box', 'hold_stairs'].forEach((key) => {
+      if (!this.textures.exists(key)) return;
+      const tex = this.textures.get(key);
+      const frame = tex.has('trimmed') ? tex.get('trimmed') : null;
+      if (!frame || !frame.sourceSize) {
+        registerHoldFrame(key, tex);
+      }
+      tex.setFilter(
+        key === 'hold_box'
+          ? Phaser.Textures.FilterMode.NEAREST
+          : Phaser.Textures.FilterMode.LINEAR
+      );
+    });
+
+    if (this.textures.exists('protagonist')) {
+      const tex = this.textures.get('protagonist');
+      ensurePlayerFrames(tex);
+      tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
+    }
+
+    if (this.textures.exists('sailor_fallen')) {
+      const tex = this.textures.get('sailor_fallen');
+      if (tex.frameTotal <= 1 || !tex.get(0)?.sourceSize) {
+        registerSailorFrames(tex);
+      }
+    }
+  }
+
   createTextures() {
     const g = this.make.graphics({ x: 0, y: 0, add: false });
 
@@ -67,23 +98,15 @@ class HoldScene extends Phaser.Scene {
   }
 
   createAnimations() {
-    if (!this.anims.exists('player-idle')) {
-      this.anims.create({
-        key: 'player-idle',
-        frames: [{ key: 'protagonist', frame: 0 }],
-        frameRate: 1
-      });
-    }
+    ['player-idle', 'player-down', 'player-walk', 'player-walk-left', 'player-walk-right'].forEach((key) => {
+      if (this.anims.exists(key)) this.anims.remove(key);
+    });
 
-    if (this.anims.exists('player-walk')) {
-      this.anims.remove('player-walk');
-    }
-    if (this.anims.exists('player-walk-left')) {
-      this.anims.remove('player-walk-left');
-    }
-    if (this.anims.exists('player-walk-right')) {
-      this.anims.remove('player-walk-right');
-    }
+    this.anims.create({
+      key: 'player-idle',
+      frames: [{ key: 'protagonist', frame: 0 }],
+      frameRate: 1
+    });
 
     this.anims.create({
       key: 'player-walk',
@@ -96,13 +119,11 @@ class HoldScene extends Phaser.Scene {
       repeat: -1
     });
 
-    if (!this.anims.exists('player-down')) {
-      this.anims.create({
-        key: 'player-down',
-        frames: [{ key: 'protagonist', frame: 4 }],
-        frameRate: 1
-      });
-    }
+    this.anims.create({
+      key: 'player-down',
+      frames: [{ key: 'protagonist', frame: 4 }],
+      frameRate: 1
+    });
   }
 
   createWorld() {
@@ -212,8 +233,10 @@ class HoldScene extends Phaser.Scene {
   }
 
   setupPlayerBody() {
-    const fw = this.player.frame.width;
-    const fh = this.player.frame.height;
+    const frame = this.player.frame;
+    if (!frame?.sourceSize) return;
+    const fw = frame.width;
+    const fh = frame.height;
     const bw = Math.round(fw * 0.45);
     const bh = Math.round(fh * 0.85);
     this.player.body.setSize(bw, bh);

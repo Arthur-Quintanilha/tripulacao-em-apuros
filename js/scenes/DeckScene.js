@@ -115,6 +115,8 @@ class DeckScene extends Phaser.Scene {
   cleanupDeckScene() {
     this._goToGameOverTimer?.remove(false);
     this._goToGameOverTimer = null;
+    this._goToVictoryTimer?.remove(false);
+    this._goToVictoryTimer = null;
     this.tweens.killAll();
     this.time.removeAllEvents();
     this.events.off('postupdate', this.clampActorsToHull, this);
@@ -1366,7 +1368,13 @@ class DeckScene extends Phaser.Scene {
     GameAudio.playVictory();
     GameHUD.hideDeckControlsHint();
     PauseSystem.unbindScene(this);
-    this.time.delayedCall(500, () => this.scene.start('VictoryScene'));
+    this._goToVictoryTimer?.remove(false);
+    this._goToVictoryTimer = this.time.delayedCall(500, () => {
+      this._goToVictoryTimer = null;
+      if (!this.sys.isActive()) return;
+      this.cameras.main.resetFX();
+      this.scene.start('VictoryScene');
+    });
   }
 
   update(time, delta) {

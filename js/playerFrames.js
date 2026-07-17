@@ -8,10 +8,9 @@ const PLAYER_FRAMES = [
 ];
 
 function registerPlayerFrames(texture) {
-  PLAYER_FRAMES.forEach((f) => {
-    if (texture.has(f.id)) {
-      texture.remove(f.id);
-    }
-    texture.add(f.id, 0, f.x, f.y, f.width, f.height);
-  });
+  ensureSheetFrames(texture, PLAYER_FRAMES);
+}
+
+function ensurePlayerFrames(texture) {
+  return ensureSheetFrames(texture, PLAYER_FRAMES);
 }
