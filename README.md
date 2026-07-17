@@ -55,8 +55,8 @@ npx serve .
 
 ## Vídeos
 
-- **Gameplay no YouTube:** [URL]
-- **Vídeo original:** [URL do Google Drive]
+- **Gameplay no YouTube:** https://www.youtube.com/watch?v=NtlCej0Urm0
+- **Vídeo original:** https://drive.google.com/file/d/1GA4YBjnOPfhMd2ivRUH39cI1w7a1Wxbv/view?usp=sharing
 
 ---
 
