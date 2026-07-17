@@ -862,13 +862,18 @@ class DeckScene extends Phaser.Scene {
     GameAudio.setCreepyWhistleVolume(this.getWhistleVolume());
   }
 
+  getLivingPirates() {
+    if (!this.pirates) return [];
+    return this.pirates.filter((p) => p.active && !p.isDead);
+  }
+
   getWhistleVolume() {
-    const pirates = this.deckPirates.filter((p) => p.active && !p.isDead);
+    const pirates = this.getLivingPirates();
     const minVol = 0.06;
     const maxVol = 1;
     const maxDist = 480;
 
-    if (!pirates.length) return minVol;
+    if (!pirates.length) return 0;
 
     const nearest = Math.min(...pirates.map((p) =>
       Phaser.Math.Distance.Between(this.player.x, this.player.y, p.x, p.y)
@@ -881,6 +886,11 @@ class DeckScene extends Phaser.Scene {
   updateCreepyWhistle(delta) {
     if (this.gameOver) {
       GameAudio.setCreepyWhistleVolume(0);
+      return;
+    }
+
+    if (!this.getLivingPirates().length) {
+      GameAudio.stopCreepyWhistle();
       return;
     }
 
@@ -1209,6 +1219,10 @@ class DeckScene extends Phaser.Scene {
           if (this.pirate1Label) this.pirate1Label.setVisible(false);
         }
         if (pirate.visionGfx) pirate.visionGfx.setVisible(false);
+
+        if (!this.getLivingPirates().length) {
+          GameAudio.stopCreepyWhistle();
+        }
 
         this.time.delayedCall(800, () => {
           this.playerControl = true;
