@@ -2169,9 +2169,14 @@ body.mobile-fullscreen.touch-controls-active #inventory-panel {
   transform-origin: bottom center;
 }
 
-body.mobile-fullscreen.touch-controls-active #hud-objective.objective-bottom-right {
-  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-  max-width: 34vw;
+body.mobile-fullscreen.touch-controls-active #hud-objective.objective-bottom-right,
+body.touch-controls-active #hud-objective.objective-bottom-right {
+  top: calc(48px + env(safe-area-inset-top, 0px));
+  bottom: auto;
+  left: calc(10px + env(safe-area-inset-left, 0px));
+  right: auto;
+  width: auto;
+  max-width: min(52vw, 240px);
 }
 
 body.mobile-fullscreen.touch-controls-active.game-active #dialog-box {
@@ -2304,8 +2309,12 @@ body.touch-controls-active.game-active #dialog-box {
   }
 
   #hud-objective.objective-bottom-right {
-    bottom: 10px;
-    right: 10px;
+    top: calc(44px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+    left: 10px;
+    right: auto;
+    width: auto;
+    max-width: min(52vw, 220px);
   }
 
   #inventory-panel {
